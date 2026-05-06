@@ -13,7 +13,7 @@ manage devices, pair it with a concrete protocol implementation
 
 **Group ID:** `pt.paradigmshift.iot`
 **Artifact ID:** `babel-iot-control-api`
-**Current version:** `1.0.0`
+**Current version:** `1.0.1`
 
 ---
 
@@ -41,12 +41,17 @@ modifications made after the fork are copyright ParadigmShift.
 | Category | Types |
 |---|---|
 | **Device identity** | `DeviceHandle`, `DeviceType`, `DeviceInterface` |
-| **Input semantics** | `InputType` (Ultrasonic, Accelerometer, ...), `Threshold<T>` |
+| **Input semantics** | `InputType` (Ultrasonic, Accelerometer, Barometer), `Threshold<T>` |
 | **Lifecycle requests** | `RegisterIoTDeviceRequest`, `UnregisterIoTDeviceRequest` |
-| **Input requests** | `IoTInputRequest`, `IoTPeriodicInputRequest`, `IoTReactiveInputRequest<T>` |
-| **Output requests** | `IoTOutputRequest` (abstract — concrete subclasses live in `babel-iot-control-protocols`) |
+| **Event base classes** | `IoTEventRequest` (abstract), `IoTPeriodicEventRequest` (abstract), `IoTReactiveEventRequest<T>` (abstract) |
 | **Replies** | `RegisterIoTDeviceReply`, `UnregisterIoTDeviceReply`, `IoTInputReply`, `ErrorCode` |
 | **Notifications** | `IoTInputNotification<T>` |
+
+`IoTEventRequest` is the abstract base for any request that targets an
+already-registered device — concrete request types (one per supported
+sensor / actuator operation) live in `babel-iot-control-protocols`
+under the `controlprotocols.requests.input` and
+`controlprotocols.requests.output` packages.
 
 `Threshold<T>` supports `equalTo`, `notEqualTo`, `lessThan`, `greaterThan`,
 `inRange`, `outsideRange`, `any`, and `none` — used by reactive input
@@ -71,7 +76,7 @@ Add to your `pom.xml`:
     <dependency>
         <groupId>pt.paradigmshift.iot</groupId>
         <artifactId>babel-iot-control-api</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </dependency>
 </dependencies>
 ```
@@ -89,14 +94,15 @@ sendRequest(
     new RegisterIoTDeviceRequest(DeviceType.GROVE_ULTRASONIC_RANGER, "front-bumper", 7),
     iotProtocolId);
 
-// On RegisterIoTDeviceReply:
+// On RegisterIoTDeviceReply, take the handle and pair it with one of the
+// concrete subclasses of IoTReactiveEventRequest defined in
+// babel-iot-control-protocols (e.g. GetReactiveEncoderRequest), or
+// derive your own:
 DeviceHandle handle = reply.getDeviceHandle();
 
+// e.g. with a concrete subclass of IoTReactiveEventRequest<Integer>:
 sendRequest(
-    new IoTReactiveInputRequest<>(
-        someRequestId,
-        handle,
-        Threshold.lessThan(20, Integer::compare)),
+    new MyReactiveDistanceRequest(handle, Threshold.lessThan(20, Integer::compare)),
     iotProtocolId);
 
 // Subscribe to IoTInputNotification to receive readings that pass the threshold.

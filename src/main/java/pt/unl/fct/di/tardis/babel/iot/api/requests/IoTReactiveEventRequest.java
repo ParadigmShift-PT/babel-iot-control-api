@@ -4,23 +4,20 @@ import pt.unl.fct.di.tardis.babel.iot.api.DeviceHandle;
 import pt.unl.fct.di.tardis.babel.iot.api.Threshold;
 
 /**
- * Request asking an IoT control protocol to monitor a registered
+ * Abstract base for input requests that ask the protocol to monitor a
  * device and emit a notification only when a sampled value satisfies
- * the supplied {@link Threshold}.
+ * a {@link Threshold} predicate.
  * <p>
- * The threshold predicate is evaluated by the protocol on every read
- * (the cadence of which is implementation-defined or controlled by a
- * companion periodic request); a notification is delivered to the
- * caller only when {@code threshold.test(value)} returns {@code true}.
+ * Concrete subclasses live alongside each protocol's sensor-specific
+ * input requests.
  *
  * @param <T> the type of value produced by the targeted sensor.
  *
  * @author João Brilha (j.brilha@campus.fct.unl.pt)
  * @author João Leitão (jc.leitao@fct.unl.pt)
  */
-public class IoTReactiveInputRequest<T> extends IoTInputRequest {
+public abstract class IoTReactiveEventRequest<T> extends IoTEventRequest {
 
-    private final DeviceHandle handle;
     private final Threshold<T> threshold;
 
     /**
@@ -28,15 +25,11 @@ public class IoTReactiveInputRequest<T> extends IoTInputRequest {
      * @param handle    the handle of the device to monitor
      * @param threshold the predicate that gates notification delivery
      */
-    public IoTReactiveInputRequest(short id, DeviceHandle handle,
+    public IoTReactiveEventRequest(short id, DeviceHandle handle,
                                    Threshold<T> threshold) {
         super(id, handle);
-        this.handle = handle;
         this.threshold = threshold;
     }
-
-    /** @return the handle of the device to monitor. */
-    public DeviceHandle getDeviceHandle() { return this.handle; }
 
     /** @return the predicate that gates notification delivery. */
     public Threshold<T> getThreshold() { return this.threshold; }

@@ -19,6 +19,8 @@ public enum DeviceType {
     // ---- I2C_IN ------------------------------------------------------------
     /** Grove three-axis accelerometer, read over I²C. */
     GROVE_3AXIS_ACCELEROMETER(DeviceInterface.I2C_IN),
+    /** Grove barometer (pressure / temperature / altitude), read over I²C. */
+    GROVE_BAROMETER(DeviceInterface.I2C_IN),
     /** Grove gesture detector, read over I²C. */
     GROVE_GESTURE_DETECTOR(DeviceInterface.I2C_IN),
 
@@ -37,8 +39,18 @@ public enum DeviceType {
     // ---- DIGITAL_IN --------------------------------------------------------
     /** Generic digital-input device wired to a GPIO line. */
     GROVE_DIGITAL_INPUT_DEVICE(DeviceInterface.DIGITAL_IN),
+    /** Grove rotary encoder (with push-button). */
+    GROVE_ENCODER(DeviceInterface.DIGITAL_IN),
     /** Grove ultrasonic ranger. */
-    GROVE_ULTRASONIC_RANGER(DeviceInterface.DIGITAL_IN);
+    GROVE_ULTRASONIC_RANGER(DeviceInterface.DIGITAL_IN),
+
+    // ---- UART --------------------------------------------------------------
+    /** Grove Air530 GPS, read over UART. */
+    GROVE_GPS_AIR530(DeviceInterface.UART),
+
+    // ---- ANALOG ------------------------------------------------------------
+    /** Generic analogue-input device read through an external ADC. */
+    GROVE_ANALOG_INPUT_DEVICE(DeviceInterface.ANALOG);
 
     private final DeviceInterface iface;
 
