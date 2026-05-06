@@ -76,8 +76,9 @@ Add to your `pom.xml`:
 </dependencies>
 ```
 
-The artifact transitively brings the Babel core (`babel-android-core`)
-required for `ProtoRequest`, `ProtoReply`, and `ProtoNotification`.
+The artifact transitively brings the Babel core
+(`pt.paradigmshift.babel:babel-core`) required for `ProtoRequest`,
+`ProtoReply`, and `ProtoNotification`.
 
 ### Registering a device and reacting to its readings
 
