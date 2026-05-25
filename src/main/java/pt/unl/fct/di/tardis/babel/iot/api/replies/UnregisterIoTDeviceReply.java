@@ -19,8 +19,13 @@ import pt.unl.fct.di.tardis.babel.iot.api.DeviceType;
  */
 public class UnregisterIoTDeviceReply extends ProtoReply {
 
-    /** Default Babel reply id used by this class. */
-    public static final short REPLY_ID = 4011;
+    /**
+     * Default Babel reply id used by this class. <b>ID:</b> {@value}.
+     * Handler class: request/reply (shared pool — continues after the
+     * request ids). Reserved in the {@code babel-iot-control-api} slot
+     * (notional protocol id 500).
+     */
+    public static final short REPLY_ID = 504;
 
     private final DeviceHandle handle;
     private final ErrorCode errorCode;
