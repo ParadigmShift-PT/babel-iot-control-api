@@ -37,3 +37,6 @@ replay_pid*
 .settings/
 
 ._*
+
+# Claude Code per-project guidance (local, not committed)
+CLAUDE.md
